@@ -5,28 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教科書版本查詢系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.98);
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --bg-light: #f0f2f5;
+
+            --color-kangxi: #0ea573;
+            --bg-kangxi: #ecfdf5;
+            --color-hanlin: #3372d8;
+            --bg-hanlin: #eff6ff;
+            --color-nani: #cd860b;
+            --bg-nani: #fffbeb;
+            --color-default: #5e6065;
+            --bg-default: #f3f4f6;
         }
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background: #f0f2f5;
+            background-color: var(--bg-light);
             background-image: radial-gradient(#d1d9e6 1px, transparent 1px);
             background-size: 20px 20px;
             padding: 50px 0;
-            color: #2d3436;
+            color: var(--text-dark);
+            font-weight: 400; /* 全域設定為正常字體 */
         }
 
         .main-card {
             background: var(--glass-bg);
             padding: 40px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 60px rgba(118, 75, 162, 0.12);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .header-section {
@@ -42,90 +56,137 @@
 
         .app-title {
             margin: 0;
-            font-weight: 700;
+            font-weight: 500; /* 改為中等字體，不加粗 */
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
-        .app-actions {
+        .level-switcher {
+            background: #f8f9fa;
+            border-radius: 14px;
+            padding: 4px;
+            border: 1px solid #e9ecef;
             display: flex;
-            gap: 8px;
+            gap: 2px;
+        }
+        .level-switcher .btn-custom {
+            padding: 8px 20px;
+            font-size: 1.05rem;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 400; /* 取消粗體 */
+        }
+        .level-switcher .btn-custom.active {
+            color: white;
+            background: var(--primary-gradient);
+            font-weight: 400;
         }
 
         .search-group {
             display: flex;
             gap: 10px;
             flex-grow: 1;
-            min-width: 500px;
+            min-width: 400px;
         }
 
         .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #636e72;
-            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
         }
         .section-title::before {
             content: "";
-            width: 4px;
-            height: 18px;
-            background: #667eea;
-            margin-right: 10px;
+            width: 5px;
+            height: 22px;
+            background: var(--primary-gradient);
+            margin-right: 12px;
             border-radius: 10px;
         }
 
         .btn-custom {
             border-radius: 12px;
-            padding: 10px 20px;
-            font-weight: 500;
+            padding: 12px 24px;
+            font-weight: 400; /* 取消粗體 */
             transition: all 0.2s ease;
             border: 1px solid #e9ecef;
             background: white;
             color: #495057;
-        }
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-            border-color: #667eea;
+            font-size: 1.1rem;
         }
         .btn-custom.active {
             background: var(--primary-gradient);
-            color: white;
+            color: white !important;
             border: none;
-            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
         }
 
         .table-container {
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
             border: 1px solid #f1f3f5;
             display: none;
-            margin-top: 30px;
+            margin-top: 35px;
+            background: white;
         }
-        .table thead { background: #f8f9fa; }
-        .grade-badge {
-            background: #edf2ff;
-            color: #4c6ef5;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-weight: 700;
+
+        .table {
+            margin-bottom: 0;
+            font-size: 1.15rem;
         }
+        .table thead th {
+            font-weight: 500; /* 改為中等字體 */
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            padding: 22px;
+            background-color: #f8f9fa;
+        }
+        .table tbody td {
+            padding: 24px 15px;
+            vertical-align: middle;
+            color: var(--text-dark);
+            border-bottom: 1px solid #f1f3f5;
+            font-weight: 400; /* 內容不加粗 */
+        }
+        .table tbody tr:hover {
+            background-color: #fbfbfe;
+        }
+
+        .grade-text {
+            font-weight: 400; /* 取消粗體 */
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            display: inline-block;
+        }
+
+        .version-badge {
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-weight: 400; /* 標籤文字不加粗 */
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-kangxi { background-color: var(--bg-kangxi); color: var(--color-kangxi); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-hanlin { background-color: var(--bg-hanlin); color: var(--color-hanlin); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge-nani { background-color: var(--bg-nani); color: var(--color-nani); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-default { background-color: var(--bg-default); color: var(--color-default); }
 
         #sync-btn {
             background: #27a9ae;
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 10px 20px;
-            font-weight: 600;
+            padding: 12px 24px;
+            font-weight: 500;
+            font-size: 1.05rem;
         }
-        #sync-btn:hover { background: #3d3dad; }
-
-        #loading-spinner { display: none; padding: 40px 0; }
+        #loading-spinner { display: none; padding: 60px 0; }
     </style>
 </head>
 <body>
@@ -133,23 +194,26 @@
 <div class="container">
     <div class="main-card">
         <div class="header-section">
-            <h2 class="app-title">教科書查詢系統</h2>
-
-            <div class="app-actions">
-                <div class="search-group">
-                    <input type="text" id="search-input" class="form-control" placeholder="搜尋校名（如：青埔）" style="border-radius: 12px;">
-                    <button class="btn btn-outline-success" style="border-radius: 12px; min-width: 60px;" onclick="handleSearch()">搜尋</button>
+            <div class="d-flex align-items-center gap-3">
+                <h2 class="app-title">教科書查詢系統</h2>
+                <div class="level-switcher">
+                    <button type="button" class="btn btn-custom active" onclick="switchLevel('國小', this)">國小</button>
+                    <button type="button" class="btn btn-custom" onclick="switchLevel('國中', this)">國中</button>
                 </div>
+            </div>
 
-                <button id="sync-btn" class="btn" onclick="handleSync()">
-                    更新資料庫
-                </button>
+            <div class="app-actions d-flex gap-2">
+                <div class="search-group">
+                    <input type="text" id="search-input" class="form-control" placeholder="搜尋校名（如：青埔）" style="border-radius: 12px; font-size: 1.1rem;">
+                    <button class="btn btn-outline-success" style="border-radius: 12px; min-width: 80px;" onclick="handleSearch()">搜尋</button>
+                </div>
+                <button id="sync-btn" class="btn" onclick="handleSync()">更新資料庫</button>
             </div>
         </div>
 
         <div class="mb-5">
             <label class="section-title">選擇行政區</label>
-            <div class="d-flex flex-wrap gap-2">
+            <div id="district-list" class="d-flex flex-wrap gap-2">
                 {% for name in districts %}
                     <button class="btn btn-custom btn-zone" onclick="fetchSchools('{{ name }}', this)">
                         {{ name }}
@@ -165,18 +229,23 @@
 
         <div id="loading-spinner" class="text-center">
             <div class="spinner-grow text-primary" role="status"></div>
-            <div class="mt-2 text-muted fw-500">正在處理請求...</div>
+            <div class="mt-3 text-muted">正在讀取...</div>
         </div>
 
         <div id="result-table" class="table-container">
-            <div class="p-3 bg-white border-bottom">
-                <h5 class="mb-0 fw-bold text-dark" id="display-school-name">版本明細</h5>
+            <div class="p-4 bg-white border-bottom">
+                <h4 class="mb-0 text-dark" id="display-school-name">📍 版本明細</h4>
             </div>
             <div class="table-responsive">
-                <table class="table align-middle">
+                <table class="table align-middle table-hover">
                     <thead class="text-center">
                         <tr>
-                            <th>年級</th><th>國語</th><th>數學</th><th>自然/生活</th><th>社會</th><th>英語</th>
+                            <th width="15%">年級</th>
+                            <th>國語</th>
+                            <th>數學</th>
+                            <th>自然/生活</th>
+                            <th>社會</th>
+                            <th>英語</th>
                         </tr>
                     </thead>
                     <tbody id="book-data-body" class="text-center"></tbody>
@@ -187,87 +256,138 @@
 </div>
 
 <script>
-    // --- 功能 A: 搜尋學校 (模糊查詢) ---
+    let currentLevel = '國小';
+
+    function formatVersionBadge(text) {
+        if (!text || text === '-' || text === 'null') return '<span class="text-muted" style="opacity: 0.5;">-</span>';
+        let badgeClass = 'badge-default';
+        let displayText = text;
+
+        if (text.includes('康軒') || text === '康') {
+            badgeClass = 'badge-kangxi';
+            displayText = '康軒';
+        } else if (text.includes('翰林') || text === '翰') {
+            badgeClass = 'badge-hanlin';
+            displayText = '翰林';
+        } else if (text.includes('南一') || text === '南') {
+            badgeClass = 'badge-nani';
+            displayText = '南一';
+        }
+        return `<span class="version-badge ${badgeClass}">${displayText}</span>`;
+    }
+
+    async function fetchBookDetails(schoolName, btnElement) {
+        if (btnElement) {
+            document.querySelectorAll('#school-list .btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
+        const bookBody = document.getElementById('book-data-body');
+        const spinner = document.getElementById('loading-spinner');
+        const resultTable = document.getElementById('result-table');
+
+        document.getElementById('display-school-name').innerText = `📍 ${schoolName}`;
+        resultTable.style.display = 'none';
+        spinner.style.display = 'block';
+
+        try {
+            const response = await fetch(`/api/schools/${encodeURIComponent(schoolName)}/?level=${currentLevel}`);
+            const books = await response.json();
+
+            spinner.style.display = 'none';
+            resultTable.style.display = 'block';
+            bookBody.innerHTML = '';
+
+            if (books.length === 0) {
+                bookBody.innerHTML = '<tr><td colspan="6" class="p-5 text-muted">暫無資料</td></tr>';
+                return;
+            }
+
+            books.forEach(book => {
+                bookBody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td><span class="grade-text">${book.grade}</span></td>
+                        <td>${formatVersionBadge(book.sub_chinese)}</td>
+                        <td>${formatVersionBadge(book.sub_math)}</td>
+                        <td>${formatVersionBadge(book.sub_science)}</td>
+                        <td>${formatVersionBadge(book.sub_social)}</td>
+                        <td>${formatVersionBadge(book.sub_english)}</td>
+                    </tr>
+                `);
+            });
+
+            // 成功獲取資料後，自動捲動到網頁最底部
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+
+        } catch (e) {
+            spinner.style.display = 'none';
+            bookBody.innerHTML = '<tr><td colspan="6" class="p-5 text-danger">資料讀取失敗</td></tr>';
+        }
+    }
+
+    async function switchLevel(level, btnElement) {
+        if (currentLevel === level) return;
+        currentLevel = level;
+        document.querySelectorAll('.level-switcher .btn-custom').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        document.getElementById('school-section').style.display = 'none';
+        document.getElementById('result-table').style.display = 'none';
+        const districtList = document.getElementById('district-list');
+        districtList.innerHTML = '<div class="spinner-border spinner-border-sm text-primary"></div>';
+        try {
+            const response = await fetch(`/api/get_districts/?level=${encodeURIComponent(level)}`);
+            const data = await response.json();
+            districtList.innerHTML = '';
+            data.districts.forEach(name => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-custom btn-zone';
+                btn.innerText = name;
+                btn.onclick = () => fetchSchools(name, btn);
+                districtList.appendChild(btn);
+            });
+        } catch (e) { districtList.innerHTML = '載入失敗'; }
+    }
+
     async function handleSearch() {
         const query = document.getElementById('search-input').value.trim();
         if (!query) return;
-
-        // 重設 UI
         document.querySelectorAll('.btn-zone').forEach(btn => btn.classList.remove('active'));
         document.getElementById('result-table').style.display = 'none';
         const schoolSection = document.getElementById('school-section');
         const schoolList = document.getElementById('school-list');
-        const title = document.getElementById('school-section-title');
-
         schoolSection.style.display = 'block';
-        title.innerText = `🔍 搜尋結果: "${query}"`;
+        document.getElementById('school-section-title').innerText = `🔍 搜尋結果: "${query}" (${currentLevel})`;
         schoolList.innerHTML = '搜尋中...';
-
         try {
-            // 呼叫 API 搜尋關鍵字
-            const response = await fetch(`/api/schools/search/?search=${encodeURIComponent(query)}`);
+            const response = await fetch(`/api/schools/search/?search=${encodeURIComponent(query)}&level=${currentLevel}`);
             const data = await response.json();
-
-            // 取得不重複的學校名單
             const uniqueSchools = [...new Set(data.map(item => item.school))];
-
-            if (uniqueSchools.length === 0) {
-                schoolList.innerHTML = '<span class="text-danger">找不到相關學校</span>';
-                return;
-            }
-
-            schoolList.innerHTML = '';
-            uniqueSchools.forEach(schoolName => {
+            schoolList.innerHTML = uniqueSchools.length === 0 ? '<span class="text-danger">找不到學校</span>' : '';
+            uniqueSchools.forEach(name => {
                 const btn = document.createElement('button');
                 btn.className = 'btn btn-custom';
-                btn.innerText = schoolName;
-                btn.onclick = () => fetchBookDetails(schoolName, btn);
+                btn.innerText = name;
+                btn.onclick = () => fetchBookDetails(name, btn);
                 schoolList.appendChild(btn);
             });
-
-            // 如果搜尋結果只有一個，自動點擊它
             if (uniqueSchools.length === 1) schoolList.firstChild.click();
-
-        } catch (e) {
-            schoolList.innerHTML = '搜尋失敗';
-        }
+        } catch (e) { schoolList.innerHTML = '搜尋失敗'; }
     }
 
-    // --- 功能 B: 同步資料庫 ---
-    async function handleSync() {
-        const syncBtn = document.getElementById('sync-btn');
-        if (!confirm('確認同步 Excel？')) return;
-        syncBtn.disabled = true;
-        syncBtn.innerHTML = '同步中...';
-        try {
-            const response = await fetch('/api/sync/', {
-                method: 'POST',
-                headers: { 'X-CSRFToken': getCookie('csrftoken') }
-            });
-            const data = await response.json();
-            alert(data.message);
-            location.reload();
-        } catch (e) {
-            alert('同步出錯');
-            syncBtn.disabled = false;
-            syncBtn.innerText = '🔄 同步資料';
-        }
-    }
-
-    // --- 功能 C: 行政區連動學校 ---
     async function fetchSchools(districtName, btnElement) {
         document.querySelectorAll('.btn-zone').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
-
         document.getElementById('result-table').style.display = 'none';
         document.getElementById('school-section').style.display = 'block';
-        document.getElementById('school-section-title').innerText = `🏢 ${districtName}區學校`;
+        document.getElementById('school-section-title').innerText = `🏢 ${districtName}區學校 (${currentLevel})`;
         const schoolList = document.getElementById('school-list');
         schoolList.innerHTML = '載入中...';
-
-        const response = await fetch(`/api/schools/?district=${encodeURIComponent(districtName)}`);
+        const response = await fetch(`/api/schools/?district=${encodeURIComponent(districtName)}&level=${currentLevel}`);
         const data = await response.json();
-
         schoolList.innerHTML = '';
         data.forEach(item => {
             const btn = document.createElement('button');
@@ -278,40 +398,17 @@
         });
     }
 
-    // --- 功能 D: 抓取詳情 ---
-    async function fetchBookDetails(schoolName, btnElement) {
-        if (btnElement) {
-            document.querySelectorAll('#school-list .btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-        }
-
-        const bookBody = document.getElementById('book-data-body');
-        const spinner = document.getElementById('loading-spinner');
-        const resultTable = document.getElementById('result-table');
-
-        document.getElementById('display-school-name').innerText = `📍 ${schoolName}`;
-        resultTable.style.display = 'none';
-        spinner.style.display = 'block';
-
-        const response = await fetch(`/api/schools/${encodeURIComponent(schoolName)}/`);
-        const books = await response.json();
-
-        spinner.style.display = 'none';
-        resultTable.style.display = 'block';
-        bookBody.innerHTML = '';
-
-        books.forEach(book => {
-            bookBody.insertAdjacentHTML('beforeend', `
-                <tr>
-                    <td><span class="grade-badge">${book.grade}</span></td>
-                    <td>${book.sub_chinese || '-'}</td>
-                    <td>${book.sub_math || '-'}</td>
-                    <td>${book.sub_science || '-'}</td>
-                    <td>${book.sub_social || '-'}</td>
-                    <td>${book.sub_english || '-'}</td>
-                </tr>
-            `);
-        });
+    async function handleSync() {
+        const syncBtn = document.getElementById('sync-btn');
+        if (!confirm('確認同步最新版本資料？')) return;
+        syncBtn.disabled = true;
+        syncBtn.innerHTML = '同步中...';
+        try {
+            const response = await fetch('/api/sync/', { method: 'POST', headers: { 'X-CSRFToken': getCookie('csrftoken') } });
+            const data = await response.json();
+            alert(data.message);
+            location.reload();
+        } catch (e) { alert('同步出錯'); syncBtn.disabled = false; syncBtn.innerText = '🔄 更新資料庫'; }
     }
 
     function getCookie(name) {

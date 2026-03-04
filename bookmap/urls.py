@@ -21,6 +21,7 @@ from books import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.DistrictListAPIView.as_view()),
+    path('api/get_districts/', views.get_districts_api),
     path('api/schools/search/', views.SchoolDetailAPIView.as_view(), name='search'),
     path('api/schools/', views.SchoolListAPIView.as_view()),
     path('api/schools/<str:school>/', views.SchoolDetailAPIView.as_view()),
