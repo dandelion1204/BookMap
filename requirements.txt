@@ -1,0 +1,16 @@
+# 核心框架與 API
+Django==4.2.10
+djangorestframework==3.14.0
+drf-spectacular==0.27.2
+
+# 資料處理 (你程式碼中有用到)
+pandas==2.2.3
+openpyxl==3.1.5
+Pillow==10.2.0
+
+# UI 與 跨域處理
+django-bootstrap5==24.3
+django-cors-headers==4.4.0
+
+# 伺服器
+gunicorn==21.2.0

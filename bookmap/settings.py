@@ -21,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&z(8hbqrjpo+_4bd+qu(=r6s$vvz4$$-@5wgo#@jw7=^08aq#@'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [   'localhost',
+                    '127.0.0.1'
+                ]
 
 
 # Application definition
@@ -83,7 +85,8 @@ WSGI_APPLICATION = 'bookmap.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db' / 'db.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3', 使用docker前
     }
 }
 

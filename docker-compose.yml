@@ -1,0 +1,27 @@
+services:
+  bookmap:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dandelion1204/bookmap:latest
+    container_name: django_bookmap
+    restart: always
+    volumes:
+      #- sqlite_data:/app/db    # for mac
+      #- data_volume:/app/data  # for mac
+
+      - ./db:/app/db          # 這裡也改成相對路徑，方便你在電腦看到 db.sqlite3
+      - ./data:/app/data      # 這裡就是你放 .xlsx 的地方
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+              python manage.py runserver 0.0.0.0:8000"
+
+# for mac
+#volumes:
+#  sqlite_data:
+#  data_volume:
